@@ -94,7 +94,7 @@ end
 
 
 class Player
-  attr_reader :x, :y
+  attr_reader :x, :y, :width, :height
 
   def initialize(window)
     @x = window.width / 2
