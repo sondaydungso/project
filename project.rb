@@ -7,10 +7,14 @@ class GameWindow < Gosu::Window
   def initialize
     super(WIDTH, HEIGHT)
     self.caption = 'Arrow Control Game'
-    @player = Player.new(self)
-    @obstacles = []
+    @player = Messi.new(self)
+    @goldenballs = []
     @score = 0
     @font = Gosu::Font.new(30)
+    @background_music = Gosu::Song.new('Among Us Drip Theme Song Original.mp3')
+
+    @background_music.play(true)
+    @background_image = Gosu::Image.new('background.jpg')
    
   end
 
@@ -19,32 +23,34 @@ class GameWindow < Gosu::Window
     @player.move_right if Gosu.button_down?(Gosu::KbRight)
     @player.move_up if Gosu.button_down?(Gosu::KbUp)
     @player.move_down if Gosu.button_down?(Gosu::KbDown)
-    spawn_obstacle
-    update_obstacles
+    spawn_balls
+    update_balls
     check_collisions
     @score = Gosu.milliseconds / 1000
   end
 
   def draw
+    @background_image.draw(0, 0, 0)
     @player.draw
-    @obstacles.each(&:draw)
+    @goldenballs.each(&:draw)
     @font.draw_text("Score: #{@score}", 10, 10, 0)
 
+
   end
-  def spawn_obstacle
+  def spawn_balls
     if rand(0..100) < 2
-      @obstacles << Obstacle.new(self)
+      @goldenballs << Goldenball.new(self)
     end
   end
 
-  def update_obstacles
-    @obstacles.each(&:update)
-    #@obstacles.reject! { |obstacle| obstacle.y > HEIGHT }
+  def update_balls
+    @goldenballs.each(&:update)
+    
   end
 
   def check_collisions
-    @obstacles.each do |obstacle|
-      if collision?(obstacle, @player)
+    @goldenballs.each do |goldenball|
+      if collision?(goldenball, @player)
         puts "Game Over! Your score: #{@score}"
 
         close
@@ -61,7 +67,7 @@ class GameWindow < Gosu::Window
   
 end
 
-class Obstacle
+class Goldenball
   attr_reader :x, :y, :width, :height
 
   def initialize(window)
@@ -93,7 +99,7 @@ class Obstacle
 end
 
 
-class Player
+class Messi
   attr_reader :x, :y, :width, :height
 
   def initialize(window)
