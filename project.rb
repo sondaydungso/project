@@ -22,6 +22,7 @@ class GameWindow < Gosu::Window
     spawn_obstacle
     update_obstacles
     check_collisions
+    @score = Gosu.milliseconds / 1000
   end
 
   def draw
@@ -31,20 +32,21 @@ class GameWindow < Gosu::Window
 
   end
   def spawn_obstacle
-    if rand(100) < 2
+    if rand(0..100) < 2
       @obstacles << Obstacle.new(self)
     end
   end
 
   def update_obstacles
     @obstacles.each(&:update)
-    @obstacles.reject! { |obstacle| obstacle.y > HEIGHT }
+    #@obstacles.reject! { |obstacle| obstacle.y > HEIGHT }
   end
 
   def check_collisions
     @obstacles.each do |obstacle|
       if collision?(obstacle, @player)
         puts "Game Over! Your score: #{@score}"
+
         close
       end
     end
@@ -56,9 +58,7 @@ class GameWindow < Gosu::Window
       object1.y < object2.y + object2.height &&
       object1.y + object1.height > object2.y
   end
-  def update_score
-    @score += 1
-  end
+  
 end
 
 class Obstacle
@@ -70,7 +70,7 @@ class Obstacle
     @height = 50
     @x = rand(@window.width - @width)
     @y = -@height
-    @speed = rand(1..5)
+    @speed = rand(1..4)
     @image = Gosu::Image.new('gb.jpg')
   end
 
