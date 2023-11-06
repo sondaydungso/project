@@ -36,7 +36,7 @@ class GameWindow < Gosu::Window
     end
     spawn_balls
     update_balls
-    check_collisions
+    check_for_collisions
     @score = Gosu.milliseconds / 1000
   end
 
@@ -74,7 +74,7 @@ class GameWindow < Gosu::Window
     
   end
 
-  def check_collisions
+  def check_for_collisions
     @goldenballs.each do |goldenball|
       if collision?(goldenball, @player)
         puts "Game Over! Your score: #{@score}"
