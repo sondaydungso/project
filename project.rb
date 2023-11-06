@@ -15,12 +15,12 @@ class GameWindow < Gosu::Window
 
     @background_music.play(true)
     @background_image = Gosu::Image.new('background.jpg')
-    @window_size_shrunk = false  
-    @shrink_time = random_shrink_time 
-    @shrinked_width = 400
-    @shrinked_height = 300
+    @window_shrunk = false  
+    @shrink_time = random_time 
+    @small_width = 400
+    @small_height = 300
 
-    @shrinked_time = nil
+    @window_shrinked_time = nil
   end
 
   def update
@@ -28,10 +28,10 @@ class GameWindow < Gosu::Window
     @player.move_right if Gosu.button_down?(Gosu::KbRight)
     @player.move_up if Gosu.button_down?(Gosu::KbUp)
     @player.move_down if Gosu.button_down?(Gosu::KbDown)
-    if Gosu.milliseconds >= @shrink_time && !@window_size_shrunk
+    if Gosu.milliseconds >= @shrink_time and !@window_shrunk
       shrink_window
     end
-    if @window_size_shrunk && Gosu.milliseconds >= @shrinked_time + 1500
+    if @window_shrunk and Gosu.milliseconds >= @window_shrinked_time + 1000
       restore_window_size
     end
     spawn_balls
@@ -41,18 +41,18 @@ class GameWindow < Gosu::Window
   end
 
   def shrink_window
-    self.width = @shrinked_width
-    self.height = @shrinked_height
-    @window_size_shrunk = true
-    @shrinked_time = Gosu.milliseconds
+    self.width = @small_width
+    self.height = @small_height
+    @window_shrunk = true
+    @window_shrinked_time = Gosu.milliseconds
   end
 
   def restore_window_size
     self.width = WIDTH
     self.height = HEIGHT
   end
-  def random_shrink_time
-    return Gosu.milliseconds + rand(6000..20000)
+  def random_time
+    return Gosu.milliseconds + rand(5000..15000)
   end
 
   def draw
@@ -85,9 +85,9 @@ class GameWindow < Gosu::Window
   end
 
   def collision?(object1, object2)
-    object1.x < object2.x + object2.width &&
-      object1.x + object1.width > object2.x &&
-      object1.y < object2.y + object2.height &&
+    object1.x < object2.x + object2.width and
+      object1.x + object1.width > object2.x and
+      object1.y < object2.y + object2.height and
       object1.y + object1.height > object2.y
   end
   
