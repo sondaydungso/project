@@ -6,7 +6,7 @@ class GameWindow < Gosu::Window
 
   def initialize
     super(WIDTH, HEIGHT)
-    self.caption = 'Arrow Control Game'
+    self.caption = 'Dont let Messi touch the ball!'
     @player = Messi.new(self)
     @goldenballs = []
     @score = 0
@@ -15,7 +15,12 @@ class GameWindow < Gosu::Window
 
     @background_music.play(true)
     @background_image = Gosu::Image.new('background.jpg')
-   
+    @window_size_shrunk = false  
+    @shrink_time = random_shrink_time 
+    @shrinked_width = 400
+    @shrinked_height = 300
+
+    @shrinked_time = nil
   end
 
   def update
@@ -23,10 +28,31 @@ class GameWindow < Gosu::Window
     @player.move_right if Gosu.button_down?(Gosu::KbRight)
     @player.move_up if Gosu.button_down?(Gosu::KbUp)
     @player.move_down if Gosu.button_down?(Gosu::KbDown)
+    if Gosu.milliseconds >= @shrink_time && !@window_size_shrunk
+      shrink_window
+    end
+    if @window_size_shrunk && Gosu.milliseconds >= @shrinked_time + 1500
+      restore_window_size
+    end
     spawn_balls
     update_balls
     check_collisions
     @score = Gosu.milliseconds / 1000
+  end
+
+  def shrink_window
+    self.width = @shrinked_width
+    self.height = @shrinked_height
+    @window_size_shrunk = true
+    @shrinked_time = Gosu.milliseconds
+  end
+
+  def restore_window_size
+    self.width = WIDTH
+    self.height = HEIGHT
+  end
+  def random_shrink_time
+    return Gosu.milliseconds + rand(6000..20000)
   end
 
   def draw
