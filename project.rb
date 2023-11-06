@@ -8,7 +8,7 @@ class GameWindow < Gosu::Window
     super(WIDTH, HEIGHT)
     self.caption = 'Dont let Messi touch the ball!'
     @player = Messi.new(self)
-    @goldenballs = []
+    @goldenballs = Array.new()
     @score = 0
     @font = Gosu::Font.new(30)
     @background_music = Gosu::Song.new('Among Us Drip Theme Song Original.mp3')
@@ -84,11 +84,11 @@ class GameWindow < Gosu::Window
     end
   end
 
-  def collision?(object1, object2)
-    object1.x < object2.x + object2.width and
-      object1.x + object1.width > object2.x and
-      object1.y < object2.y + object2.height and
-      object1.y + object1.height > object2.y
+  def collision?(a, b)
+    a.x < b.x + b.width and
+      a.x + a.width > b.x and
+      a.y < b.y + b.height and
+      a.y + a.height > b.y
   end
   
 end

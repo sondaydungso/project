@@ -1,0 +1,4 @@
+primary source references:
+https://chat.openai.com/
+Learn game programming with Ruby : bring your ideas to life with Gosu
+
